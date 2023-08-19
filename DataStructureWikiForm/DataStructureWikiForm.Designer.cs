@@ -62,28 +62,26 @@
             // 
             // TextBoxFeedback
             // 
-            TextBoxFeedback.Location = new Point(40, 553);
-            TextBoxFeedback.Margin = new Padding(3, 4, 3, 4);
+            TextBoxFeedback.Location = new Point(35, 415);
             TextBoxFeedback.Name = "TextBoxFeedback";
-            TextBoxFeedback.Size = new Size(831, 27);
+            TextBoxFeedback.Size = new Size(728, 23);
             TextBoxFeedback.TabIndex = 8;
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(40, 529);
+            label5.Location = new Point(35, 397);
             label5.Name = "label5";
-            label5.Size = new Size(72, 20);
+            label5.Size = new Size(57, 15);
             label5.TabIndex = 9;
             label5.Text = "Feedback";
             // 
             // ListViewWiki
             // 
             ListViewWiki.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
-            ListViewWiki.Location = new Point(493, 100);
-            ListViewWiki.Margin = new Padding(3, 4, 3, 4);
+            ListViewWiki.Location = new Point(431, 75);
             ListViewWiki.Name = "ListViewWiki";
-            ListViewWiki.Size = new Size(389, 424);
+            ListViewWiki.Size = new Size(341, 319);
             ListViewWiki.TabIndex = 14;
             ListViewWiki.UseCompatibleStateImageBehavior = false;
             ListViewWiki.View = View.Details;
@@ -109,21 +107,18 @@
             groupBoxControls.Controls.Add(ButtonDelete);
             groupBoxControls.Controls.Add(ButtonEdit);
             groupBoxControls.Controls.Add(ButtonAdd);
-            groupBoxControls.Location = new Point(310, 16);
-            groupBoxControls.Margin = new Padding(3, 4, 3, 4);
+            groupBoxControls.Location = new Point(271, 12);
             groupBoxControls.Name = "groupBoxControls";
-            groupBoxControls.Padding = new Padding(3, 4, 3, 4);
-            groupBoxControls.Size = new Size(176, 220);
+            groupBoxControls.Size = new Size(154, 165);
             groupBoxControls.TabIndex = 15;
             groupBoxControls.TabStop = false;
             groupBoxControls.Text = "Data Controls";
             // 
             // ButtonDelete
             // 
-            ButtonDelete.Location = new Point(42, 155);
-            ButtonDelete.Margin = new Padding(3, 4, 3, 4);
+            ButtonDelete.Location = new Point(37, 116);
             ButtonDelete.Name = "ButtonDelete";
-            ButtonDelete.Size = new Size(86, 31);
+            ButtonDelete.Size = new Size(75, 23);
             ButtonDelete.TabIndex = 2;
             ButtonDelete.Text = "Delete";
             ButtonDelete.UseVisualStyleBackColor = true;
@@ -131,20 +126,19 @@
             // 
             // ButtonEdit
             // 
-            ButtonEdit.Location = new Point(42, 95);
-            ButtonEdit.Margin = new Padding(3, 4, 3, 4);
+            ButtonEdit.Location = new Point(37, 71);
             ButtonEdit.Name = "ButtonEdit";
-            ButtonEdit.Size = new Size(86, 31);
+            ButtonEdit.Size = new Size(75, 23);
             ButtonEdit.TabIndex = 1;
             ButtonEdit.Text = "Edit";
             ButtonEdit.UseVisualStyleBackColor = true;
+            ButtonEdit.Click += ButtonEdit_Click;
             // 
             // ButtonAdd
             // 
-            ButtonAdd.Location = new Point(42, 35);
-            ButtonAdd.Margin = new Padding(3, 4, 3, 4);
+            ButtonAdd.Location = new Point(37, 26);
             ButtonAdd.Name = "ButtonAdd";
-            ButtonAdd.Size = new Size(86, 31);
+            ButtonAdd.Size = new Size(75, 23);
             ButtonAdd.TabIndex = 0;
             ButtonAdd.Text = "Add";
             ButtonAdd.UseVisualStyleBackColor = true;
@@ -154,31 +148,28 @@
             // 
             groupBoxFile.Controls.Add(ButtonSave);
             groupBoxFile.Controls.Add(ButtonOpen);
-            groupBoxFile.Location = new Point(310, 244);
-            groupBoxFile.Margin = new Padding(3, 4, 3, 4);
+            groupBoxFile.Location = new Point(271, 183);
             groupBoxFile.Name = "groupBoxFile";
-            groupBoxFile.Padding = new Padding(3, 4, 3, 4);
-            groupBoxFile.Size = new Size(176, 207);
+            groupBoxFile.Size = new Size(154, 155);
             groupBoxFile.TabIndex = 16;
             groupBoxFile.TabStop = false;
             groupBoxFile.Text = "File Controls";
             // 
             // ButtonSave
             // 
-            ButtonSave.Location = new Point(42, 125);
-            ButtonSave.Margin = new Padding(3, 4, 3, 4);
+            ButtonSave.Location = new Point(37, 94);
             ButtonSave.Name = "ButtonSave";
-            ButtonSave.Size = new Size(86, 31);
+            ButtonSave.Size = new Size(75, 23);
             ButtonSave.TabIndex = 2;
             ButtonSave.Text = "Save";
             ButtonSave.UseVisualStyleBackColor = true;
+            ButtonSave.Click += ButtonSave_Click;
             // 
             // ButtonOpen
             // 
-            ButtonOpen.Location = new Point(42, 53);
-            ButtonOpen.Margin = new Padding(3, 4, 3, 4);
+            ButtonOpen.Location = new Point(37, 40);
             ButtonOpen.Name = "ButtonOpen";
-            ButtonOpen.Size = new Size(86, 31);
+            ButtonOpen.Size = new Size(75, 23);
             ButtonOpen.TabIndex = 1;
             ButtonOpen.Text = "Open";
             ButtonOpen.UseVisualStyleBackColor = true;
@@ -186,27 +177,25 @@
             // 
             // TextBoxSearch
             // 
-            TextBoxSearch.Location = new Point(493, 40);
-            TextBoxSearch.Margin = new Padding(3, 4, 3, 4);
+            TextBoxSearch.Location = new Point(431, 30);
             TextBoxSearch.Name = "TextBoxSearch";
-            TextBoxSearch.Size = new Size(297, 27);
+            TextBoxSearch.Size = new Size(260, 23);
             TextBoxSearch.TabIndex = 17;
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(493, 16);
+            label6.Location = new Point(431, 12);
             label6.Name = "label6";
-            label6.Size = new Size(82, 20);
+            label6.Size = new Size(66, 15);
             label6.TabIndex = 18;
             label6.Text = "Search List:";
             // 
             // ButtonSearch
             // 
-            ButtonSearch.Location = new Point(797, 40);
-            ButtonSearch.Margin = new Padding(3, 4, 3, 4);
+            ButtonSearch.Location = new Point(697, 30);
             ButtonSearch.Name = "ButtonSearch";
-            ButtonSearch.Size = new Size(86, 31);
+            ButtonSearch.Size = new Size(75, 23);
             ButtonSearch.TabIndex = 20;
             ButtonSearch.Text = "Search";
             ButtonSearch.UseVisualStyleBackColor = true;
@@ -215,107 +204,104 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(493, 76);
+            label7.Location = new Point(431, 57);
             label7.Name = "label7";
-            label7.Size = new Size(154, 20);
+            label7.Size = new Size(122, 15);
             label7.TabIndex = 21;
             label7.Text = "List of Data Structures";
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(27, 205);
+            label4.Location = new Point(24, 154);
             label4.Name = "label4";
-            label4.Size = new Size(75, 20);
+            label4.Size = new Size(59, 15);
             label4.TabIndex = 29;
             label4.Text = "Definition";
             // 
             // TextBoxDefinition
             // 
-            TextBoxDefinition.Location = new Point(27, 229);
-            TextBoxDefinition.Margin = new Padding(3, 4, 3, 4);
+            TextBoxDefinition.Location = new Point(24, 172);
             TextBoxDefinition.Multiline = true;
             TextBoxDefinition.Name = "TextBoxDefinition";
-            TextBoxDefinition.Size = new Size(275, 295);
+            TextBoxDefinition.Size = new Size(241, 222);
             TextBoxDefinition.TabIndex = 28;
+            TextBoxDefinition.DoubleClick += Double_Click;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(27, 140);
+            label3.Location = new Point(24, 105);
             label3.Name = "label3";
-            label3.Size = new Size(103, 20);
+            label3.Size = new Size(82, 15);
             label3.TabIndex = 27;
             label3.Text = "Structure Type";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(27, 75);
+            label2.Location = new Point(24, 56);
             label2.Name = "label2";
-            label2.Size = new Size(69, 20);
+            label2.Size = new Size(55, 15);
             label2.TabIndex = 26;
             label2.Text = "Category";
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(27, 16);
+            label1.Location = new Point(24, 12);
             label1.Name = "label1";
-            label1.Size = new Size(148, 20);
+            label1.Size = new Size(117, 15);
             label1.TabIndex = 25;
             label1.Text = "Data Structure Name";
             // 
             // TextBoxStructure
             // 
-            TextBoxStructure.Location = new Point(27, 164);
-            TextBoxStructure.Margin = new Padding(3, 4, 3, 4);
+            TextBoxStructure.Location = new Point(24, 123);
             TextBoxStructure.Name = "TextBoxStructure";
-            TextBoxStructure.Size = new Size(275, 27);
+            TextBoxStructure.Size = new Size(241, 23);
             TextBoxStructure.TabIndex = 24;
+            TextBoxStructure.DoubleClick += Double_Click;
             // 
             // TextBoxCategory
             // 
-            TextBoxCategory.Location = new Point(27, 99);
-            TextBoxCategory.Margin = new Padding(3, 4, 3, 4);
+            TextBoxCategory.Location = new Point(24, 74);
             TextBoxCategory.Name = "TextBoxCategory";
-            TextBoxCategory.Size = new Size(275, 27);
+            TextBoxCategory.Size = new Size(241, 23);
             TextBoxCategory.TabIndex = 23;
+            TextBoxCategory.DoubleClick += Double_Click;
             // 
             // TextBoxName
             // 
-            TextBoxName.Location = new Point(27, 40);
-            TextBoxName.Margin = new Padding(3, 4, 3, 4);
+            TextBoxName.Location = new Point(24, 30);
             TextBoxName.Name = "TextBoxName";
-            TextBoxName.Size = new Size(275, 27);
+            TextBoxName.Size = new Size(241, 23);
             TextBoxName.TabIndex = 22;
+            TextBoxName.DoubleClick += Double_Click;
             // 
             // groupBoxReset
             // 
             groupBoxReset.Controls.Add(ButtonReset);
-            groupBoxReset.Location = new Point(310, 451);
-            groupBoxReset.Margin = new Padding(3, 4, 3, 4);
+            groupBoxReset.Location = new Point(271, 338);
             groupBoxReset.Name = "groupBoxReset";
-            groupBoxReset.Padding = new Padding(3, 4, 3, 4);
-            groupBoxReset.Size = new Size(176, 75);
+            groupBoxReset.Size = new Size(154, 56);
             groupBoxReset.TabIndex = 30;
             groupBoxReset.TabStop = false;
             // 
             // ButtonReset
             // 
-            ButtonReset.Location = new Point(42, 27);
-            ButtonReset.Margin = new Padding(3, 4, 3, 4);
+            ButtonReset.Location = new Point(37, 20);
             ButtonReset.Name = "ButtonReset";
-            ButtonReset.Size = new Size(86, 31);
+            ButtonReset.Size = new Size(75, 23);
             ButtonReset.TabIndex = 0;
             ButtonReset.Text = "Reset";
             ButtonReset.UseVisualStyleBackColor = true;
             // 
             // DataStructureWikiForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(914, 600);
+            ClientSize = new Size(800, 450);
             Controls.Add(groupBoxReset);
             Controls.Add(label4);
             Controls.Add(TextBoxDefinition);
@@ -334,7 +320,6 @@
             Controls.Add(ListViewWiki);
             Controls.Add(label5);
             Controls.Add(TextBoxFeedback);
-            Margin = new Padding(3, 4, 3, 4);
             Name = "DataStructureWikiForm";
             Text = "Form1";
             groupBoxControls.ResumeLayout(false);

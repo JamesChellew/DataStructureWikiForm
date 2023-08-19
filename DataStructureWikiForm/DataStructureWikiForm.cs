@@ -1,5 +1,9 @@
+using Microsoft.VisualBasic.ApplicationServices;
+using Microsoft.VisualBasic;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
+using System.Text;
 
 namespace DataStructureWikiForm
 {
@@ -8,6 +12,7 @@ namespace DataStructureWikiForm
         public DataStructureWikiForm()
         {
             InitializeComponent();
+            InitialArrayFill();
             DisplayArray();
         }
         // 9.1	Create a global 2D string array, use static variables for the dimensions (row = 12, column = 4),
@@ -17,6 +22,7 @@ namespace DataStructureWikiForm
 
         string[,] wikiArray = new string[maxRows, maxColumns];
 
+        #region Add, Delete, Edit
         // 9.2	Create an ADD button that will store the information from the 4 text boxes into the 2D array,
         private void ButtonAdd_Click(object sender, EventArgs e)
         {
@@ -29,6 +35,43 @@ namespace DataStructureWikiForm
                 DisplayArray();
                 ClearFields();
                 pointer++;
+            }
+        }
+        // 9.3	Create an EDIT button that will allow the user to modify any information from the 4 text boxes into the 2D array,
+        private void ButtonEdit_Click(object sender, EventArgs e)
+        {
+            if (AllFieldsFilled() && ListViewWiki.SelectedItems.Count > 0)
+            {
+                //ListViewWiki.SelectedItems.IndexOf()
+            }
+        }
+
+        // 9.4	Create a DELETE button that removes all the information from a single entry of the array; the user must be prompted before the final deletion occurs, 
+        private void ButtonDelete_Click(object sender, EventArgs e)
+        {
+            if (ListViewWiki.SelectedItems.Count > 0)
+            {
+                int index = ListViewWiki.Items.IndexOf(ListViewWiki.SelectedItems[0]);
+                wikiArray[index, 0] = "";
+                wikiArray[index, 1] = "";
+                wikiArray[index, 2] = "";
+                wikiArray[index, 3] = "";
+                DisplayArray();
+                ClearFields();
+
+            }
+        }
+        #endregion
+
+        #region Array Methods
+        private void InitialArrayFill()
+        {
+            for (int i = 0; i < maxRows; i++)
+            {
+                for (int j = 0; j < maxColumns; j++)
+                {
+                    wikiArray[i, j] = "";
+                }
             }
         }
         private bool AllFieldsFilled()
@@ -87,11 +130,11 @@ namespace DataStructureWikiForm
         private void SortArray()
         {
             string temp;
-            for (int i = 0; i < maxRows; i++)
+            for (int i = 0; i < maxRows - 1; i++)
             {
-                for (int j = 0; j < maxRows; j++)
+                for (int j = 0; j < maxRows - 1; j++)
                 {
-                    if (wikiArray[j, 0].CompareTo(wikiArray[j + 1, 0]) < 0)
+                    if (wikiArray[j, 0].CompareTo(wikiArray[j + 1, 0]) > 0)
                     {
                         for (int k = 0; k < maxColumns; k++)
                         {
@@ -103,6 +146,7 @@ namespace DataStructureWikiForm
                 }
             }
         }
+        #endregion
 
         // 9.9	Create a method so the user can select a definition (Name) from the ListView and all the information is displayed in the appropriate Textboxes,
         private void ListViewWiki_SelectedIndexChanged(object sender, EventArgs e)
@@ -116,21 +160,7 @@ namespace DataStructureWikiForm
                 TextBoxDefinition.Text = wikiArray[index, 3];
             }
         }
-        // 9.4	Create a DELETE button that removes all the information from a single entry of the array; the user must be prompted before the final deletion occurs, 
-        private void ButtonDelete_Click(object sender, EventArgs e)
-        {
-            if (ListViewWiki.SelectedItems.Count > 0)
-            {
-                int index = ListViewWiki.Items.IndexOf(ListViewWiki.SelectedItems[0]);
-                wikiArray[index, 0] = "";
-                wikiArray[index, 1] = "";
-                wikiArray[index, 2] = "";
-                wikiArray[index, 3] = "";
-                DisplayArray();
-                ClearFields();
 
-            }
-        }
         // 9.7	Write the code for a Binary Search for the Name in the 2D array and display the information in the other textboxes when found, add suitable feedback if the search in not successful and clear the search textbox (do not use any built-in array methods),
         private void ButtonSearch_Click(object sender, EventArgs e)
         {
@@ -170,14 +200,16 @@ namespace DataStructureWikiForm
         private void ButtonOpen_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Dat Files (.dat)|*.dat";
+            openFileDialog.Filter = "Dat Files|*.dat";
             openFileDialog.Title = "Select a Dat File";
-            openFileDialog.InitialDirectory = Application.StartupPath;
+            openFileDialog.InitialDirectory = System.Windows.Forms.Application.StartupPath;
 
             DialogResult result = openFileDialog.ShowDialog();
+            string fileName = openFileDialog.FileName;
             if (result == DialogResult.OK)
             {
-                OpenFile();
+                OpenFile(fileName);
+                DisplayArray();
             }
             else if (result == DialogResult.Cancel)
             {
@@ -188,10 +220,73 @@ namespace DataStructureWikiForm
                 TextBoxFeedback.Text = "No File Opened";
             }
         }
-        private void OpenFile()
+        private void OpenFile(string fileName)
         {
-            Array.Clear(wikiArray);
+            if (File.Exists(fileName))
+            {
+                using (var fileStream = File.Open(fileName, FileMode.Open))
+                {
+                    using (var streamReader = new BinaryReader(fileStream, Encoding.UTF8, false))
+                    {
+                        int nextEmptyRow = 0;
+                        Array.Clear(wikiArray, 0, wikiArray.Length);
+                        for (int i = 0; i < maxRows; i++)
+                        {
+                            for (int j = 0; j < maxColumns; j++)
+                            {
+                                wikiArray[i, j] = streamReader.ReadString();
+                            }
+                        }
+                    }
+                }
+            }
 
+
+        }
+
+        private void ButtonSave_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.InitialDirectory = System.Windows.Forms.Application.StartupPath;
+            saveFileDialog.Title = "Choose a Location to Save the .dat File";
+            saveFileDialog.Filter = "Dat File|.dat";
+
+            DialogResult result = saveFileDialog.ShowDialog();
+            string fileName = saveFileDialog.FileName;
+            if (result == DialogResult.OK)
+            {
+                SaveFile(fileName);
+            }
+            else
+            {
+                TextBoxFeedback.Text = "File was not saved";
+            }
+
+        }
+        private void SaveFile(string fileName)
+        {
+            try
+            {
+                using (var fileStream = new FileStream(fileName, FileMode.Create))
+                {
+                    using (var streamWriter = new BinaryWriter(fileStream, Encoding.UTF8, false))
+                    {
+                        foreach (string x in wikiArray)
+                        {
+                            streamWriter.Write(x);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                TextBoxFeedback.Text = ex.Message;
+            }
+        }
+
+        private void Double_Click(object sender, EventArgs e)
+        {
+            ClearFields();
         }
     }
 }
