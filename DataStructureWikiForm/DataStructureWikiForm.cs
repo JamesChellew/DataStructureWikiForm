@@ -169,10 +169,28 @@ namespace DataStructureWikiForm
 
         private void ButtonOpen_Click(object sender, EventArgs e)
         {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Dat Files (.dat)|*.dat";
+            openFileDialog.Title = "Select a Dat File";
+            openFileDialog.InitialDirectory = Application.StartupPath;
 
+            DialogResult result = openFileDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                OpenFile();
+            }
+            else if (result == DialogResult.Cancel)
+            {
+                TextBoxFeedback.Text = "Cancelled opening file";
+            }
+            else
+            {
+                TextBoxFeedback.Text = "No File Opened";
+            }
         }
         private void OpenFile()
         {
+            Array.Clear(wikiArray);
 
         }
     }
