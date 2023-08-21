@@ -1,8 +1,4 @@
-using Microsoft.VisualBasic.ApplicationServices;
-using Microsoft.VisualBasic;
-using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
-using static System.Net.Mime.MediaTypeNames;
+using System.Diagnostics;
 using System.Text;
 
 namespace DataStructureWikiForm
@@ -12,59 +8,20 @@ namespace DataStructureWikiForm
         public DataStructureWikiForm()
         {
             InitializeComponent();
-            InitialArrayFill();
+            InitialiseArray();
             DisplayArray();
         }
+        #region Static Variables
         // 9.1	Create a global 2D string array, use static variables for the dimensions (row = 12, column = 4),
         static int maxRows = 12;
         static int maxColumns = 4;
-        static int pointer = 0;
-
-        string[,] wikiArray = new string[maxRows, maxColumns];
-
-        #region Add, Delete, Edit
-        // 9.2	Create an ADD button that will store the information from the 4 text boxes into the 2D array,
-        private void ButtonAdd_Click(object sender, EventArgs e)
-        {
-            if (AllFieldsFilled() && pointer < 12)
-            {
-                wikiArray[pointer, 0] = TextBoxName.Text;
-                wikiArray[pointer, 1] = TextBoxCategory.Text;
-                wikiArray[pointer, 2] = TextBoxStructure.Text;
-                wikiArray[pointer, 3] = TextBoxDefinition.Text;
-                DisplayArray();
-                ClearFields();
-                pointer++;
-            }
-        }
-        // 9.3	Create an EDIT button that will allow the user to modify any information from the 4 text boxes into the 2D array,
-        private void ButtonEdit_Click(object sender, EventArgs e)
-        {
-            if (AllFieldsFilled() && ListViewWiki.SelectedItems.Count > 0)
-            {
-                //ListViewWiki.SelectedItems.IndexOf()
-            }
-        }
-
-        // 9.4	Create a DELETE button that removes all the information from a single entry of the array; the user must be prompted before the final deletion occurs, 
-        private void ButtonDelete_Click(object sender, EventArgs e)
-        {
-            if (ListViewWiki.SelectedItems.Count > 0)
-            {
-                int index = ListViewWiki.Items.IndexOf(ListViewWiki.SelectedItems[0]);
-                wikiArray[index, 0] = "";
-                wikiArray[index, 1] = "";
-                wikiArray[index, 2] = "";
-                wikiArray[index, 3] = "";
-                DisplayArray();
-                ClearFields();
-
-            }
-        }
+        static int pointer = 0; // points to the next unfilled row in the array.
+        static string[,] wikiArray = new string[maxRows, maxColumns];
         #endregion
 
-        #region Array Methods
-        private void InitialArrayFill()
+        #region Array and ViewList Methods
+        // Fills all array elements with empty strings
+        private void InitialiseArray()
         {
             for (int i = 0; i < maxRows; i++)
             {
@@ -74,21 +31,15 @@ namespace DataStructureWikiForm
                 }
             }
         }
+        // Returns True if all 4 entry fields are filled with text and not whitespace
         private bool AllFieldsFilled()
         {
-            if (String.IsNullOrWhiteSpace(TextBoxName.Text))
-            {
-                return false;
-            }
-            else if (String.IsNullOrWhiteSpace(TextBoxCategory.Text))
-            {
-                return false;
-            }
-            else if (String.IsNullOrWhiteSpace(TextBoxStructure.Text))
-            {
-                return false;
-            }
-            else if (String.IsNullOrWhiteSpace(TextBoxDefinition.Text))
+            if (
+                String.IsNullOrWhiteSpace(TextBoxName.Text) ||
+                String.IsNullOrWhiteSpace(TextBoxCategory.Text) ||
+                String.IsNullOrWhiteSpace(TextBoxStructure.Text) ||
+                String.IsNullOrWhiteSpace(TextBoxDefinition.Text)
+                )
             {
                 return false;
             }
@@ -106,7 +57,6 @@ namespace DataStructureWikiForm
             TextBoxCategory.Clear();
             TextBoxStructure.Clear();
             TextBoxDefinition.Clear();
-
         }
 
         // 9.8	Create a display method that will show the following information in a ListView: Name and Category,
@@ -116,7 +66,7 @@ namespace DataStructureWikiForm
             ListViewWiki.Items.Clear();
             for (int i = 0; i < maxRows; i++)
             {
-                if (!String.IsNullOrEmpty(wikiArray[i, 0]))
+                if (!String.IsNullOrWhiteSpace(wikiArray[i, 0]))
                 {
                     ListViewItem item = new ListViewItem(wikiArray[i, 0]);
                     item.SubItems.Add(wikiArray[i, 1]);
@@ -130,11 +80,24 @@ namespace DataStructureWikiForm
         private void SortArray()
         {
             string temp;
-            for (int i = 0; i < maxRows - 1; i++)
+            for (int i = 0; i < maxRows; i++)
             {
                 for (int j = 0; j < maxRows - 1; j++)
                 {
-                    if (wikiArray[j, 0].CompareTo(wikiArray[j + 1, 0]) > 0)
+                    if (String.IsNullOrWhiteSpace(wikiArray[j, 0])) // always switches empty row
+                    {
+                        for (int k = 0; k < maxColumns; k++)
+                        {
+                            temp = wikiArray[j, k];
+                            wikiArray[j, k] = wikiArray[j + 1, k];
+                            wikiArray[j + 1, k] = temp;
+                        }
+                    }
+                    else if (String.IsNullOrWhiteSpace(wikiArray[j + 1, 0])) // never switches if next row is empty and first row is populated
+                    {
+                        continue;
+                    }
+                    else if (wikiArray[j, 0].CompareTo(wikiArray[j + 1, 0]) > 0) // Switches based if string j+1 Proceeds string j
                     {
                         for (int k = 0; k < maxColumns; k++)
                         {
@@ -146,57 +109,139 @@ namespace DataStructureWikiForm
                 }
             }
         }
-        #endregion
+
+
 
         // 9.9	Create a method so the user can select a definition (Name) from the ListView and all the information is displayed in the appropriate Textboxes,
         private void ListViewWiki_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (ListViewWiki.SelectedItems.Count > 0)
             {
-                int index = ListViewWiki.Items.IndexOf(ListViewWiki.SelectedItems[0]);
+                int index = ListViewWiki.SelectedIndices[0];
                 TextBoxName.Text = wikiArray[index, 0];
                 TextBoxCategory.Text = wikiArray[index, 1];
                 TextBoxStructure.Text = wikiArray[index, 2];
                 TextBoxDefinition.Text = wikiArray[index, 3];
             }
         }
+        #endregion
 
+        #region Add, Delete, Edit, Reset Button Methods
+        // 9.2	Create an ADD button that will store the information from the 4 text boxes into the 2D array,
+        private void ButtonAdd_Click(object sender, EventArgs e)
+        {
+            if (AllFieldsFilled() && pointer < 12)
+            {
+                wikiArray[pointer, 0] = TextBoxName.Text;
+                wikiArray[pointer, 1] = TextBoxCategory.Text;
+                wikiArray[pointer, 2] = TextBoxStructure.Text;
+                wikiArray[pointer, 3] = TextBoxDefinition.Text;
+                pointer++;
+                DisplayArray();
+                ClearFields();
+            }
+        }
+        // 9.3	Create an EDIT button that will allow the user to modify any information from the 4 text boxes into the 2D array,
+        private void ButtonEdit_Click(object sender, EventArgs e)
+        {
+            if (AllFieldsFilled() && ListViewWiki.SelectedItems.Count > 0)
+            {
+                int selectedIndex = ListViewWiki.SelectedIndices[0];
+                wikiArray[selectedIndex, 0] = TextBoxName.Text;
+                wikiArray[selectedIndex, 1] = TextBoxCategory.Text;
+                wikiArray[selectedIndex, 2] = TextBoxStructure.Text;
+                wikiArray[selectedIndex, 3] = TextBoxDefinition.Text;
+                DisplayArray();
+                ClearFields();
+            }
+        }
+
+        // 9.4	Create a DELETE button that removes all the information from a single entry of the array; the user must be prompted before the final deletion occurs, 
+        private void ButtonDelete_Click(object sender, EventArgs e)
+        {
+            if (ListViewWiki.SelectedItems.Count > 0)
+            {
+                int selectedIndex = ListViewWiki.SelectedIndices[0];
+                if (wikiArray[selectedIndex, 0] != "")
+                {
+                    wikiArray[selectedIndex, 0] = "";
+                    wikiArray[selectedIndex, 1] = "";
+                    wikiArray[selectedIndex, 2] = "";
+                    wikiArray[selectedIndex, 3] = "";
+                    pointer--;
+                    DisplayArray();
+                    ClearFields();
+                }
+
+            }
+        }
+        // Resets contents of wikiArray and resets pointer value to 0
+        private void ButtonReset_Click(object sender, EventArgs e)
+        {
+            InitialiseArray();
+            pointer = 0;
+            DisplayArray();
+            ClearFields();
+        }
+        // Clears the 4 entry textboxes. Mapped to each of the 4 textboxes.
+        private void Double_Click(object sender, EventArgs e)
+        {
+            ClearFields();
+        }
+        #endregion
+
+        #region Binary Search Button
         // 9.7	Write the code for a Binary Search for the Name in the 2D array and display the information in the other textboxes when found, add suitable feedback if the search in not successful and clear the search textbox (do not use any built-in array methods),
         private void ButtonSearch_Click(object sender, EventArgs e)
         {
             int startIndex = 0;
             int endIndex = maxRows;
-            int midIndex;
+            int midIndex = 0;
             bool flag = false;
             string input = TextBoxSearch.Text;
-
-            while (!flag && startIndex < endIndex)
+            if (!String.IsNullOrWhiteSpace(input))
             {
-                midIndex = (endIndex - startIndex) / 2;
-                if (input == wikiArray[midIndex, 0])
+                while (!flag && startIndex < endIndex)
                 {
-                    flag = true;
-                    break;
+                    midIndex = (endIndex + startIndex) / 2;
+                    if (input == wikiArray[midIndex, 0]) // returns true if match
+                    {
+                        flag = true;
+                        break;
+                    }
+                    else if (String.IsNullOrWhiteSpace(wikiArray[midIndex, 0])) // if midIndex is whitespace, the rest of array is empty, so set upper bound to mid-1
+                    {
+                        endIndex = midIndex - 1;
+                    }
+                    else if (input.CompareTo(wikiArray[midIndex, 1]) > 0) // if input comes after the midIndex item alphabetically, set the lower bound to mid+1
+                    {
+                        startIndex = midIndex + 1;
+                    }
+                    else
+                    {
+                        endIndex = midIndex - 1;
+                    }
                 }
-                else if (input.CompareTo(wikiArray[midIndex, 1]) > 0)
+                if (flag)
                 {
-                    startIndex = midIndex;
+                    ListViewWiki.SelectedItems.Clear();
+                    ListViewWiki.Items[midIndex].Selected = true;
+                    TextBoxFeedback.Text = "Search result: " + input + ", was found";
+                    TextBoxSearch.Clear();
+                    TextBoxSearch.Focus();
                 }
                 else
                 {
-                    endIndex = midIndex;
+                    TextBoxFeedback.Text = "No matching results";
+                    ListViewWiki.SelectedItems.Clear();
+                    TextBoxSearch.Focus();
                 }
             }
-            if (flag)
-            {
-                // select search match
-            }
-            else
-            {
-                TextBoxFeedback.Text = "No matching results";
-            }
         }
+        #endregion
 
+        #region Open File
+        //9.11	Create a LOAD button that will read the information from a binary file called definitions.dat into the 2D array, ensure the user has the option to select an alternative file. Use a file stream and BinaryReader to complete this task.
         private void ButtonOpen_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -224,26 +269,39 @@ namespace DataStructureWikiForm
         {
             if (File.Exists(fileName))
             {
-                using (var fileStream = File.Open(fileName, FileMode.Open))
+                using var fileStream = File.Open(fileName, FileMode.Open);
+                using var streamReader = new BinaryReader(fileStream, Encoding.UTF8, false);
+                InitialiseArray();
+                int nextEmptyLine = 0;
+                while (fileStream.Position < fileStream.Length)
                 {
-                    using (var streamReader = new BinaryReader(fileStream, Encoding.UTF8, false))
+                    for (int j = 0; j < maxColumns; j++)
                     {
-                        int nextEmptyRow = 0;
-                        Array.Clear(wikiArray, 0, wikiArray.Length);
-                        for (int i = 0; i < maxRows; i++)
-                        {
-                            for (int j = 0; j < maxColumns; j++)
-                            {
-                                wikiArray[i, j] = streamReader.ReadString();
-                            }
-                        }
+                        wikiArray[nextEmptyLine, j] = streamReader.ReadString();
+
+                    }
+                    nextEmptyLine++;
+                }
+                SortArray();
+                for (int i = 0; i < maxRows; i++)
+                {
+                    if (!String.IsNullOrWhiteSpace(wikiArray[i, 0]))
+                    {
+                        pointer = i + 1;
                     }
                 }
+                return;
             }
-
-
+            else
+            {
+                TextBoxFeedback.Text = "file not found";
+                return;
+            }
         }
+        #endregion
 
+        #region Save File
+        //9.10	Create a SAVE button so the information from the 2D array can be written into a binary file called definitions.dat which is sorted by Name, ensure the user has the option to select an alternative file. Use a file stream and BinaryWriter to create the file.
         private void ButtonSave_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -283,10 +341,7 @@ namespace DataStructureWikiForm
                 TextBoxFeedback.Text = ex.Message;
             }
         }
+        #endregion
 
-        private void Double_Click(object sender, EventArgs e)
-        {
-            ClearFields();
-        }
     }
 }

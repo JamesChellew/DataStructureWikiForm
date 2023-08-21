@@ -64,6 +64,7 @@
             // 
             TextBoxFeedback.Location = new Point(35, 415);
             TextBoxFeedback.Name = "TextBoxFeedback";
+            TextBoxFeedback.ReadOnly = true;
             TextBoxFeedback.Size = new Size(728, 23);
             TextBoxFeedback.TabIndex = 8;
             // 
@@ -86,6 +87,7 @@
             ListViewWiki.UseCompatibleStateImageBehavior = false;
             ListViewWiki.View = View.Details;
             ListViewWiki.SelectedIndexChanged += ListViewWiki_SelectedIndexChanged;
+            ListViewWiki.Click += ListViewWiki_SelectedIndexChanged;
             // 
             // columnHeader1
             // 
@@ -296,6 +298,7 @@
             ButtonReset.TabIndex = 0;
             ButtonReset.Text = "Reset";
             ButtonReset.UseVisualStyleBackColor = true;
+            ButtonReset.Click += ButtonReset_Click;
             // 
             // DataStructureWikiForm
             // 
@@ -321,7 +324,7 @@
             Controls.Add(label5);
             Controls.Add(TextBoxFeedback);
             Name = "DataStructureWikiForm";
-            Text = "Form1";
+            Text = "Data Structure Wiki";
             groupBoxControls.ResumeLayout(false);
             groupBoxFile.ResumeLayout(false);
             groupBoxReset.ResumeLayout(false);
