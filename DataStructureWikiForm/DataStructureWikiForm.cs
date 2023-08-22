@@ -19,7 +19,7 @@ namespace DataStructureWikiForm
         static string[,] wikiArray = new string[maxRows, maxColumns];
         #endregion
 
-        #region Array and ViewList Methods
+        #region Intialise, Sort and Display Array Methods + Fields Clear, IsAllFilled and SelectedIndexChange Methods
         // Fills all array elements with empty strings
         private void InitialiseArray()
         {
@@ -32,7 +32,7 @@ namespace DataStructureWikiForm
             }
         }
         // Returns True if all 4 entry fields are filled with text and not whitespace
-        private bool AllFieldsFilled()
+        private bool IsAllFieldsFilled()
         {
             if (
                 String.IsNullOrWhiteSpace(TextBoxName.Text) ||
@@ -109,9 +109,6 @@ namespace DataStructureWikiForm
                 }
             }
         }
-
-
-
         // 9.9	Create a method so the user can select a definition (Name) from the ListView and all the information is displayed in the appropriate Textboxes,
         private void ListViewWiki_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -130,7 +127,7 @@ namespace DataStructureWikiForm
         // 9.2	Create an ADD button that will store the information from the 4 text boxes into the 2D array,
         private void ButtonAdd_Click(object sender, EventArgs e)
         {
-            if (AllFieldsFilled() && pointer < 12)
+            if (IsAllFieldsFilled() && pointer < 12)
             {
                 wikiArray[pointer, 0] = TextBoxName.Text;
                 wikiArray[pointer, 1] = TextBoxCategory.Text;
@@ -144,7 +141,7 @@ namespace DataStructureWikiForm
         // 9.3	Create an EDIT button that will allow the user to modify any information from the 4 text boxes into the 2D array,
         private void ButtonEdit_Click(object sender, EventArgs e)
         {
-            if (AllFieldsFilled() && ListViewWiki.SelectedItems.Count > 0)
+            if (IsAllFieldsFilled() && ListViewWiki.SelectedItems.Count > 0)
             {
                 int selectedIndex = ListViewWiki.SelectedIndices[0];
                 wikiArray[selectedIndex, 0] = TextBoxName.Text;
@@ -199,30 +196,48 @@ namespace DataStructureWikiForm
             int midIndex = 0;
             bool flag = false;
             string input = TextBoxSearch.Text;
+
+            //StreamWriter debugWriter = new StreamWriter("Debug_Bin_Search.txt", true); // Debug file generation code.
+            //int debugLoopCount = 0;
+            //debugWriter.WriteLine("Bin Search Test: " + DateTime.Now.ToString() + "\n");
+
             if (!String.IsNullOrWhiteSpace(input))
             {
                 while (!flag && startIndex < endIndex)
                 {
+                    //debugWriter.WriteLine("Loop Count: " + debugLoopCount);
+                    //debugLoopCount++;
+                    //debugWriter.WriteLine("Start Index: {0} | Mid Index: {1} | End Index: {2}", startIndex, midIndex, endIndex);
+
                     midIndex = (endIndex + startIndex) / 2;
-                    if (input == wikiArray[midIndex, 0]) // returns true if match
+                    if (input == wikiArray[midIndex, 0]) // returns true if Name Element at mid index row matches the input term.
                     {
+                        //debugWriter.WriteLine("Search Match\n");
+
                         flag = true;
                         break;
                     }
-                    else if (String.IsNullOrWhiteSpace(wikiArray[midIndex, 0])) // if midIndex is whitespace, the rest of array is empty, so set upper bound to mid-1
+                    else if (String.IsNullOrWhiteSpace(wikiArray[midIndex, 0])) // if Name at mid index is whitespace, implies rest of array is empty, so set upper bound to mid-1
                     {
+                        //debugWriter.WriteLine("Array term is whitespace\n");
+
                         endIndex = midIndex - 1;
                     }
                     else if (input.CompareTo(wikiArray[midIndex, 1]) > 0) // if input comes after the midIndex item alphabetically, set the lower bound to mid+1
                     {
+                        //debugWriter.WriteLine("Input Comes after mid index\n");
+
                         startIndex = midIndex + 1;
                     }
-                    else
+                    else // else the input comes before the mid index so set upper bound to mid-1.
                     {
+                        //debugWriter.WriteLine("Input comes before mid index\n");
+
                         endIndex = midIndex - 1;
                     }
                 }
-                if (flag)
+                
+                if (flag) // if match is found, select the item and display its respective information, then return focus to search.
                 {
                     ListViewWiki.SelectedItems.Clear();
                     ListViewWiki.Items[midIndex].Selected = true;
@@ -230,13 +245,15 @@ namespace DataStructureWikiForm
                     TextBoxSearch.Clear();
                     TextBoxSearch.Focus();
                 }
-                else
+                else // if no match, render feedback in textbox and return focus to search box.
                 {
                     TextBoxFeedback.Text = "No matching results";
                     ListViewWiki.SelectedItems.Clear();
                     TextBoxSearch.Focus();
                 }
+                
             }
+            //debugWriter.Close();
         }
         #endregion
 
