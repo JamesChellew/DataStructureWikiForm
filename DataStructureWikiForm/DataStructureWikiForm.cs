@@ -158,16 +158,26 @@ namespace DataStructureWikiForm
         {
             if (ListViewWiki.SelectedItems.Count > 0)
             {
-                int selectedIndex = ListViewWiki.SelectedIndices[0];
-                if (wikiArray[selectedIndex, 0] != "")
+                DialogResult result = MessageBox.Show("Do you want to delete this item?", "Confirm Delete", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
                 {
-                    wikiArray[selectedIndex, 0] = "";
-                    wikiArray[selectedIndex, 1] = "";
-                    wikiArray[selectedIndex, 2] = "";
-                    wikiArray[selectedIndex, 3] = "";
-                    pointer--;
-                    DisplayArray();
-                    ClearFields();
+                    int selectedIndex = ListViewWiki.SelectedIndices[0];
+                    if (wikiArray[selectedIndex, 0] != "")
+                    {
+                        wikiArray[selectedIndex, 0] = "";
+                        wikiArray[selectedIndex, 1] = "";
+                        wikiArray[selectedIndex, 2] = "";
+                        wikiArray[selectedIndex, 3] = "";
+                        pointer--;
+                        DisplayArray();
+                        ClearFields();
+                    }
+
+                }
+                else
+                {
+                    ListViewWiki.SelectedItems.Clear();
+                    
                 }
 
             }
@@ -289,6 +299,7 @@ namespace DataStructureWikiForm
                 using var fileStream = File.Open(fileName, FileMode.Open);
                 using var streamReader = new BinaryReader(fileStream, Encoding.UTF8, false);
                 InitialiseArray();
+                ClearFields();
                 int nextEmptyLine = 0;
                 while (fileStream.Position < fileStream.Length)
                 {
