@@ -295,6 +295,7 @@
             TextBoxName.TabIndex = 22;
             toolTip1.SetToolTip(TextBoxName, "Enter Data Structure Name");
             TextBoxName.DoubleClick += Double_Click;
+            TextBoxName.Leave += TextBoxName_Leave;
             // 
             // groupBoxReset
             // 
@@ -341,6 +342,7 @@
             Controls.Add(TextBoxFeedback);
             Name = "DataStructureWikiForm";
             Text = "Data Structure Wiki";
+            FormClosing += DataStructureWikiForm_FormClosing;
             groupBoxControls.ResumeLayout(false);
             groupBoxFile.ResumeLayout(false);
             groupBoxReset.ResumeLayout(false);

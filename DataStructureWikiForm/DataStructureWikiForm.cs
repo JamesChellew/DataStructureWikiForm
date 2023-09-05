@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 
 namespace DataStructureWikiForm
@@ -120,6 +121,12 @@ namespace DataStructureWikiForm
                 TextBoxStructure.Text = wikiArray[index, 2];
                 TextBoxDefinition.Text = wikiArray[index, 3];
             }
+        }
+        // Capitalises text when clicking off the box.
+        private void TextBoxName_Leave(object sender, EventArgs e)
+        {
+            TextInfo textInfo = new CultureInfo("en-AU").TextInfo;
+            textInfo.ToTitleCase(TextBoxName.Text);
         }
         #endregion
 
@@ -373,6 +380,10 @@ namespace DataStructureWikiForm
         //9.10	Create a SAVE button so the information from the 2D array can be written into a binary file called definitions.dat which is sorted by Name, ensure the user has the option to select an alternative file. Use a file stream and BinaryWriter to create the file.
         private void ButtonSave_Click(object sender, EventArgs e)
         {
+            StartSave();
+        }
+        private void StartSave()
+        {
             // SaveFileDialog properties and instantiation.
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = System.Windows.Forms.Application.StartupPath;
@@ -390,10 +401,10 @@ namespace DataStructureWikiForm
             {
                 TextBoxFeedback.Text = "File was not saved";
             }
-
         }
         private void SaveFile(string fileName)
         {
+
             try // try-catch for any file io exceptions.
             {
                 using var fileStream = new FileStream(fileName, FileMode.Create); // File stream allows file to be open and created in this case
@@ -406,6 +417,25 @@ namespace DataStructureWikiForm
             catch (Exception ex) // Display exception error message to user
             {
                 TextBoxFeedback.Text = ex.Message;
+            }
+        }
+        #endregion
+
+        #region Closing Form
+        private void DataStructureWikiForm_FormClosing(object sender, FormClosingEventArgs e)
+        { // Ensures user does not lose data when quitting the program.
+            DialogResult result = MessageBox.Show("Do you wish to save before closing?", "Confirmation", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                StartSave();
+            }
+            else
+            {
+                result = MessageBox.Show("Are you sure? All data will be lost.", "Are you sure?", MessageBoxButtons.YesNo);
+                if (result == DialogResult.No)
+                {
+                    e.Cancel = true;
+                }
             }
         }
         #endregion
