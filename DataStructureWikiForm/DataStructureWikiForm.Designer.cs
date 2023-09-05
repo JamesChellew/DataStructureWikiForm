@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             TextBoxFeedback = new TextBox();
             label5 = new Label();
             ListViewWiki = new ListView();
@@ -55,6 +56,7 @@
             TextBoxName = new TextBox();
             groupBoxReset = new GroupBox();
             ButtonReset = new Button();
+            toolTip1 = new ToolTip(components);
             groupBoxControls.SuspendLayout();
             groupBoxFile.SuspendLayout();
             groupBoxReset.SuspendLayout();
@@ -67,6 +69,7 @@
             TextBoxFeedback.ReadOnly = true;
             TextBoxFeedback.Size = new Size(728, 23);
             TextBoxFeedback.TabIndex = 8;
+            toolTip1.SetToolTip(TextBoxFeedback, "Description of Operations Will Show Here");
             // 
             // label5
             // 
@@ -84,6 +87,7 @@
             ListViewWiki.Name = "ListViewWiki";
             ListViewWiki.Size = new Size(341, 319);
             ListViewWiki.TabIndex = 14;
+            toolTip1.SetToolTip(ListViewWiki, "Contents of Wiki");
             ListViewWiki.UseCompatibleStateImageBehavior = false;
             ListViewWiki.View = View.Details;
             ListViewWiki.SelectedIndexChanged += ListViewWiki_SelectedIndexChanged;
@@ -123,6 +127,7 @@
             ButtonDelete.Size = new Size(75, 23);
             ButtonDelete.TabIndex = 2;
             ButtonDelete.Text = "Delete";
+            toolTip1.SetToolTip(ButtonDelete, "Delete Selection");
             ButtonDelete.UseVisualStyleBackColor = true;
             ButtonDelete.Click += ButtonDelete_Click;
             // 
@@ -133,6 +138,7 @@
             ButtonEdit.Size = new Size(75, 23);
             ButtonEdit.TabIndex = 1;
             ButtonEdit.Text = "Edit";
+            toolTip1.SetToolTip(ButtonEdit, "Edit Selection");
             ButtonEdit.UseVisualStyleBackColor = true;
             ButtonEdit.Click += ButtonEdit_Click;
             // 
@@ -143,6 +149,7 @@
             ButtonAdd.Size = new Size(75, 23);
             ButtonAdd.TabIndex = 0;
             ButtonAdd.Text = "Add";
+            toolTip1.SetToolTip(ButtonAdd, "Add to Wiki");
             ButtonAdd.UseVisualStyleBackColor = true;
             ButtonAdd.Click += ButtonAdd_Click;
             // 
@@ -164,6 +171,7 @@
             ButtonSave.Size = new Size(75, 23);
             ButtonSave.TabIndex = 2;
             ButtonSave.Text = "Save";
+            toolTip1.SetToolTip(ButtonSave, "Save the Wiki to File");
             ButtonSave.UseVisualStyleBackColor = true;
             ButtonSave.Click += ButtonSave_Click;
             // 
@@ -174,6 +182,7 @@
             ButtonOpen.Size = new Size(75, 23);
             ButtonOpen.TabIndex = 1;
             ButtonOpen.Text = "Open";
+            toolTip1.SetToolTip(ButtonOpen, "Open a File");
             ButtonOpen.UseVisualStyleBackColor = true;
             ButtonOpen.Click += ButtonOpen_Click;
             // 
@@ -183,6 +192,7 @@
             TextBoxSearch.Name = "TextBoxSearch";
             TextBoxSearch.Size = new Size(260, 23);
             TextBoxSearch.TabIndex = 17;
+            toolTip1.SetToolTip(TextBoxSearch, "Enter Search Key");
             // 
             // label6
             // 
@@ -200,6 +210,7 @@
             ButtonSearch.Size = new Size(75, 23);
             ButtonSearch.TabIndex = 20;
             ButtonSearch.Text = "Search";
+            toolTip1.SetToolTip(ButtonSearch, "Press to Search");
             ButtonSearch.UseVisualStyleBackColor = true;
             ButtonSearch.Click += ButtonSearch_Click;
             // 
@@ -228,6 +239,7 @@
             TextBoxDefinition.Name = "TextBoxDefinition";
             TextBoxDefinition.Size = new Size(241, 222);
             TextBoxDefinition.TabIndex = 28;
+            toolTip1.SetToolTip(TextBoxDefinition, "Enter Definition");
             TextBoxDefinition.DoubleClick += Double_Click;
             // 
             // label3
@@ -263,6 +275,7 @@
             TextBoxStructure.Name = "TextBoxStructure";
             TextBoxStructure.Size = new Size(241, 23);
             TextBoxStructure.TabIndex = 24;
+            toolTip1.SetToolTip(TextBoxStructure, "Enter Structure Type");
             TextBoxStructure.DoubleClick += Double_Click;
             // 
             // TextBoxCategory
@@ -271,6 +284,7 @@
             TextBoxCategory.Name = "TextBoxCategory";
             TextBoxCategory.Size = new Size(241, 23);
             TextBoxCategory.TabIndex = 23;
+            toolTip1.SetToolTip(TextBoxCategory, "Enter Category Type");
             TextBoxCategory.DoubleClick += Double_Click;
             // 
             // TextBoxName
@@ -279,6 +293,7 @@
             TextBoxName.Name = "TextBoxName";
             TextBoxName.Size = new Size(241, 23);
             TextBoxName.TabIndex = 22;
+            toolTip1.SetToolTip(TextBoxName, "Enter Data Structure Name");
             TextBoxName.DoubleClick += Double_Click;
             // 
             // groupBoxReset
@@ -297,6 +312,7 @@
             ButtonReset.Size = new Size(75, 23);
             ButtonReset.TabIndex = 0;
             ButtonReset.Text = "Reset";
+            toolTip1.SetToolTip(ButtonReset, "Reset Wiki");
             ButtonReset.UseVisualStyleBackColor = true;
             ButtonReset.Click += ButtonReset_Click;
             // 
@@ -360,5 +376,6 @@
         private TextBox TextBoxName;
         private GroupBox groupBoxReset;
         private Button ButtonReset;
+        private ToolTip toolTip1;
     }
 }

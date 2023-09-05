@@ -284,7 +284,7 @@ namespace DataStructureWikiForm
                         endIndex = midIndex - 1;
                     }
                 }
-                
+
                 if (flag) // if match is found, select the item and display its respective information, then return focus to search.
                 {
                     ListViewWiki.SelectedItems.Clear();
@@ -299,7 +299,7 @@ namespace DataStructureWikiForm
                     ListViewWiki.SelectedItems.Clear();
                     TextBoxSearch.Focus();
                 }
-                
+
             }
             //debugWriter.Close();
         }
