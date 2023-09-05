@@ -134,8 +134,19 @@ namespace DataStructureWikiForm
                 wikiArray[pointer, 2] = TextBoxStructure.Text;
                 wikiArray[pointer, 3] = TextBoxDefinition.Text;
                 pointer++;
+
+                TextBoxFeedback.Text = TextBoxName.Text + " was added to the wiki";
+
                 DisplayArray();
                 ClearFields();
+            }
+            else if (IsAllFieldsFilled()) // and pointer is equal to or greater than 12
+            {
+                TextBoxFeedback.Text = "Wiki is full";
+            }
+            else // if fields are not filled
+            {
+                TextBoxFeedback.Text = "Fill in all 4 fields to add to wiki";
             }
         }
         // 9.3	Create an EDIT button that will allow the user to modify any information from the 4 text boxes into the 2D array,
@@ -148,8 +159,19 @@ namespace DataStructureWikiForm
                 wikiArray[selectedIndex, 1] = TextBoxCategory.Text;
                 wikiArray[selectedIndex, 2] = TextBoxStructure.Text;
                 wikiArray[selectedIndex, 3] = TextBoxDefinition.Text;
+
+                TextBoxFeedback.Text = TextBoxName.Text + " was updated";
+
                 DisplayArray();
                 ClearFields();
+            }
+            else if (IsAllFieldsFilled()) // If nothing is selected
+            {
+                TextBoxFeedback.Text = "Nothing is selected to change";
+            }
+            else // if the fields aren't filled.
+            {
+                TextBoxFeedback.Text = "Fill in all 4 fields to update";
             }
         }
 
@@ -162,7 +184,7 @@ namespace DataStructureWikiForm
                 if (result == DialogResult.Yes)
                 {
                     int selectedIndex = ListViewWiki.SelectedIndices[0];
-                    if (wikiArray[selectedIndex, 0] != "")
+                    if (wikiArray[selectedIndex, 0] != "") // may be redundant as all empty strings do not show.
                     {
                         wikiArray[selectedIndex, 0] = "";
                         wikiArray[selectedIndex, 1] = "";
@@ -171,29 +193,45 @@ namespace DataStructureWikiForm
                         pointer--;
                         DisplayArray();
                         ClearFields();
+                        TextBoxFeedback.Text = "Item deleted";
                     }
 
                 }
-                else
+                else // If no is clicked or message box is closed.
                 {
                     ListViewWiki.SelectedItems.Clear();
-                    
+                    TextBoxFeedback.Text = "Item not deleted";
                 }
-
+            }
+            else
+            {
+                TextBoxFeedback.Text = "Nothing selected to delete";
             }
         }
         // Resets contents of wikiArray and resets pointer value to 0
         private void ButtonReset_Click(object sender, EventArgs e)
         {
-            InitialiseArray();
-            pointer = 0;
-            DisplayArray();
-            ClearFields();
+            DialogResult result = MessageBox.Show("Are you sure you want to reset the wiki?", "Reset Confirmation", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                InitialiseArray();
+                pointer = 0;
+                DisplayArray();
+                ClearFields();
+
+                TextBoxFeedback.Text = "Wiki reset";
+            }
+            else
+            {
+                TextBoxFeedback.Text = "Cancelled wiki reset";
+            }
         }
         // Clears the 4 entry textboxes. Mapped to each of the 4 textboxes.
         private void Double_Click(object sender, EventArgs e)
         {
             ClearFields();
+
+            TextBoxFeedback.Text = "Fields cleared";
         }
         #endregion
 
@@ -271,17 +309,19 @@ namespace DataStructureWikiForm
         //9.11	Create a LOAD button that will read the information from a binary file called definitions.dat into the 2D array, ensure the user has the option to select an alternative file. Use a file stream and BinaryReader to complete this task.
         private void ButtonOpen_Click(object sender, EventArgs e)
         {
+            // OpenFileDialog properties and instantiation.
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Dat Files|*.dat";
             openFileDialog.Title = "Select a Dat File";
-            openFileDialog.InitialDirectory = System.Windows.Forms.Application.StartupPath;
+            openFileDialog.InitialDirectory = Application.StartupPath;
 
             DialogResult result = openFileDialog.ShowDialog();
-            string fileName = openFileDialog.FileName;
+            string fileName = openFileDialog.FileName; // gets the file name from dialog.
             if (result == DialogResult.OK)
             {
                 OpenFile(fileName);
                 DisplayArray();
+                TextBoxFeedback.Text = "File opened";
             }
             else if (result == DialogResult.Cancel)
             {
@@ -296,31 +336,32 @@ namespace DataStructureWikiForm
         {
             if (File.Exists(fileName))
             {
-                using var fileStream = File.Open(fileName, FileMode.Open);
-                using var streamReader = new BinaryReader(fileStream, Encoding.UTF8, false);
+                // "using" keyword means the streams do not need to be closed
+                using var fileStream = File.Open(fileName, FileMode.Open); // file stream allows file to be opened and read from
+                using var streamReader = new BinaryReader(fileStream, Encoding.UTF8, false); // stream reader allows data to be read from file stream.
                 InitialiseArray();
                 ClearFields();
                 int nextEmptyLine = 0;
                 while (fileStream.Position < fileStream.Length)
+                // Compares the current position of file stream to the length of it. Will loop until the position reaches the end of the stream.
                 {
                     for (int j = 0; j < maxColumns; j++)
                     {
-                        wikiArray[nextEmptyLine, j] = streamReader.ReadString();
-
+                        wikiArray[nextEmptyLine, j] = streamReader.ReadString(); // Each string read will be atomic and associated with the column index in sequence.
                     }
-                    nextEmptyLine++;
+                    nextEmptyLine++; // increments through each row of array 
                 }
                 SortArray();
-                for (int i = 0; i < maxRows; i++)
+                for (int i = 0; i < maxRows; i++) // checks how many rows were added into array
                 {
-                    if (!String.IsNullOrWhiteSpace(wikiArray[i, 0]))
+                    if (!String.IsNullOrWhiteSpace(wikiArray[i, 0])) // Checks if there is data in the row
                     {
-                        pointer = i + 1;
+                        pointer = i + 1; // Sets pointer to next row in array (once the next row is empty, the pointer will not move)
                     }
                 }
                 return;
             }
-            else
+            else // OpenFileDialog may filter file not found errors. This is here for redundancy.
             {
                 TextBoxFeedback.Text = "file not found";
                 return;
@@ -332,16 +373,18 @@ namespace DataStructureWikiForm
         //9.10	Create a SAVE button so the information from the 2D array can be written into a binary file called definitions.dat which is sorted by Name, ensure the user has the option to select an alternative file. Use a file stream and BinaryWriter to create the file.
         private void ButtonSave_Click(object sender, EventArgs e)
         {
+            // SaveFileDialog properties and instantiation.
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = System.Windows.Forms.Application.StartupPath;
             saveFileDialog.Title = "Choose a Location to Save the .dat File";
             saveFileDialog.Filter = "Dat File|.dat";
 
             DialogResult result = saveFileDialog.ShowDialog();
-            string fileName = saveFileDialog.FileName;
+            string fileName = saveFileDialog.FileName; // gets file name from dialog
             if (result == DialogResult.OK)
             {
                 SaveFile(fileName);
+                TextBoxFeedback.Text = "File Saved";
             }
             else
             {
@@ -351,25 +394,20 @@ namespace DataStructureWikiForm
         }
         private void SaveFile(string fileName)
         {
-            try
+            try // try-catch for any file io exceptions.
             {
-                using (var fileStream = new FileStream(fileName, FileMode.Create))
+                using var fileStream = new FileStream(fileName, FileMode.Create); // File stream allows file to be open and created in this case
+                using var streamWriter = new BinaryWriter(fileStream, Encoding.UTF8, false); // binary writer allows data to be written to file.
+                foreach (string x in wikiArray)
                 {
-                    using (var streamWriter = new BinaryWriter(fileStream, Encoding.UTF8, false))
-                    {
-                        foreach (string x in wikiArray)
-                        {
-                            streamWriter.Write(x);
-                        }
-                    }
+                    streamWriter.Write(x); // iterates each element in 2D array in order (each row "left to right")
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) // Display exception error message to user
             {
                 TextBoxFeedback.Text = ex.Message;
             }
         }
         #endregion
-
     }
 }
