@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 
@@ -126,7 +125,7 @@ namespace DataStructureWikiForm
         private void TextBoxName_Leave(object sender, EventArgs e)
         {
             TextInfo textInfo = new CultureInfo("en-AU").TextInfo;
-            textInfo.ToTitleCase(TextBoxName.Text);
+            TextBoxName.Text = textInfo.ToTitleCase(TextBoxName.Text);
         }
         #endregion
 
@@ -246,69 +245,79 @@ namespace DataStructureWikiForm
         // 9.7	Write the code for a Binary Search for the Name in the 2D array and display the information in the other textboxes when found, add suitable feedback if the search in not successful and clear the search textbox (do not use any built-in array methods),
         private void ButtonSearch_Click(object sender, EventArgs e)
         {
+            TextInfo textInfo = new CultureInfo("en-AU").TextInfo;
+            string input = (textInfo.ToTitleCase(TextBoxSearch.Text)).Trim(); // changes to title case then trims it.
+            if (String.IsNullOrWhiteSpace(input))
+            {
+                TextBoxFeedback.Text = "Input a valid word";
+                TextBoxSearch.Focus();
+            }
+            else
+            {
+                BinarySearch(input); // passes input on to binary search method.
+            }
+
+        }
+
+        private void BinarySearch(string input)
+        {
             int startIndex = 0;
             int endIndex = maxRows;
             int midIndex = 0;
             bool flag = false;
-            string input = TextBoxSearch.Text;
+
 
             using StreamWriter debugWriter = new StreamWriter("Debug_Bin_Search.txt", true); // Debug file generation code.
             int debugLoopCount = 0;
             debugWriter.WriteLine("Bin Search Test: {0}" + DateTime.Now.ToString() + "\n", input);
 
-            if (!String.IsNullOrWhiteSpace(input))
+            while (!flag && startIndex <= endIndex)
             {
-                while (!flag && startIndex <= endIndex)
+                debugWriter.WriteLine("Loop Count: " + debugLoopCount);
+                debugLoopCount++;
+                midIndex = (endIndex + startIndex) / 2;
+
+                debugWriter.WriteLine("Start Index: {0} | Mid Index: {1} | End Index: {2}", startIndex, midIndex, endIndex);
+
+                if (input == wikiArray[midIndex, 0]) // returns true if Name Element at mid index row matches the input term.
                 {
-                    debugWriter.WriteLine("Loop Count: " + debugLoopCount);
-                    debugLoopCount++;
-                    midIndex = (endIndex + startIndex) / 2;
+                    debugWriter.WriteLine("Search Match\n");
 
-                    debugWriter.WriteLine("Start Index: {0} | Mid Index: {1} | End Index: {2}", startIndex, midIndex, endIndex);
-
-                    
-                    if (input == wikiArray[midIndex, 0]) // returns true if Name Element at mid index row matches the input term.
-                    {
-                        debugWriter.WriteLine("Search Match\n");
-
-                        flag = true;
-                        break;
-                    }
-                    else if (String.IsNullOrWhiteSpace(wikiArray[midIndex, 0])) // if Name at mid index is whitespace, implies rest of array is empty, so set upper bound to mid-1
-                    {
-                        debugWriter.WriteLine("Array term is whitespace\n");
-
-                        endIndex = midIndex - 1;
-                    }
-                    else if (input.CompareTo(wikiArray[midIndex, 0]) > 0) // if input comes after the midIndex item alphabetically, set the lower bound to mid+1
-                    {
-                        debugWriter.WriteLine("Input Comes after mid index: {0}\n", wikiArray[midIndex, 0]);
-
-                        startIndex = midIndex + 1;
-                    }
-                    else // else the input comes before the mid index so set upper bound to mid-1.
-                    {
-                        debugWriter.WriteLine("Input comes before mid index: {0}\n", wikiArray[midIndex, 0]);
-
-                        endIndex = midIndex - 1;
-                    }
+                    flag = true;
+                    break;
                 }
-
-                if (flag) // if match is found, select the item and display its respective information, then return focus to search.
+                else if (String.IsNullOrWhiteSpace(wikiArray[midIndex, 0])) // if Name at mid index is whitespace, implies rest of array is empty, so set upper bound to mid-1
                 {
-                    ListViewWiki.SelectedItems.Clear();
-                    ListViewWiki.Items[midIndex].Selected = true;
-                    TextBoxFeedback.Text = "Search result: " + input + ", was found";
-                    TextBoxSearch.Clear();
-                    TextBoxSearch.Focus();
-                }
-                else // if no match, render feedback in textbox and return focus to search box.
-                {
-                    TextBoxFeedback.Text = "No matching results";
-                    ListViewWiki.SelectedItems.Clear();
-                    TextBoxSearch.Focus();
-                }
+                    debugWriter.WriteLine("Array term is whitespace\n");
 
+                    endIndex = midIndex - 1;
+                }
+                else if (input.CompareTo(wikiArray[midIndex, 0]) > 0) // if input comes after the midIndex item alphabetically, set the lower bound to mid+1
+                {
+                    debugWriter.WriteLine("Input Comes after mid index: {0}\n", wikiArray[midIndex, 0]);
+
+                    startIndex = midIndex + 1;
+                }
+                else // else the input comes before the mid index so set upper bound to mid-1.
+                {
+                    debugWriter.WriteLine("Input comes before mid index: {0}\n", wikiArray[midIndex, 0]);
+
+                    endIndex = midIndex - 1;
+                }
+            }
+            if (flag) // if match is found, select the item and display its respective information, then return focus to search.
+            {
+                ListViewWiki.SelectedItems.Clear();
+                ListViewWiki.Items[midIndex].Selected = true;
+                TextBoxFeedback.Text = "Search result: " + input + ", was found";
+                TextBoxSearch.Clear();
+                TextBoxSearch.Focus();
+            }
+            else // if no match, render feedback in textbox and return focus to search box.
+            {
+                TextBoxFeedback.Text = "No matching results";
+                ListViewWiki.SelectedItems.Clear();
+                TextBoxSearch.Focus();
             }
         }
         #endregion
