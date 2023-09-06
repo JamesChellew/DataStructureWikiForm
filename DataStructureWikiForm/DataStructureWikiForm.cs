@@ -1,3 +1,10 @@
+/*
+ * James Chellew 
+ * StuID: 30071566
+ * Assessment 1 WikiForm
+ * Date: 06/09/2023
+ */
+
 using System.Globalization;
 using System.Text;
 
