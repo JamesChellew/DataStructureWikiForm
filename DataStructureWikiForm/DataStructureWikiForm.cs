@@ -252,41 +252,43 @@ namespace DataStructureWikiForm
             bool flag = false;
             string input = TextBoxSearch.Text;
 
-            //StreamWriter debugWriter = new StreamWriter("Debug_Bin_Search.txt", true); // Debug file generation code.
-            //int debugLoopCount = 0;
-            //debugWriter.WriteLine("Bin Search Test: " + DateTime.Now.ToString() + "\n");
+            using StreamWriter debugWriter = new StreamWriter("Debug_Bin_Search.txt", true); // Debug file generation code.
+            int debugLoopCount = 0;
+            debugWriter.WriteLine("Bin Search Test: {0}" + DateTime.Now.ToString() + "\n", input);
 
             if (!String.IsNullOrWhiteSpace(input))
             {
-                while (!flag && startIndex < endIndex)
+                while (!flag && startIndex <= endIndex)
                 {
-                    //debugWriter.WriteLine("Loop Count: " + debugLoopCount);
-                    //debugLoopCount++;
-                    //debugWriter.WriteLine("Start Index: {0} | Mid Index: {1} | End Index: {2}", startIndex, midIndex, endIndex);
-
+                    debugWriter.WriteLine("Loop Count: " + debugLoopCount);
+                    debugLoopCount++;
                     midIndex = (endIndex + startIndex) / 2;
+
+                    debugWriter.WriteLine("Start Index: {0} | Mid Index: {1} | End Index: {2}", startIndex, midIndex, endIndex);
+
+                    
                     if (input == wikiArray[midIndex, 0]) // returns true if Name Element at mid index row matches the input term.
                     {
-                        //debugWriter.WriteLine("Search Match\n");
+                        debugWriter.WriteLine("Search Match\n");
 
                         flag = true;
                         break;
                     }
                     else if (String.IsNullOrWhiteSpace(wikiArray[midIndex, 0])) // if Name at mid index is whitespace, implies rest of array is empty, so set upper bound to mid-1
                     {
-                        //debugWriter.WriteLine("Array term is whitespace\n");
+                        debugWriter.WriteLine("Array term is whitespace\n");
 
                         endIndex = midIndex - 1;
                     }
-                    else if (input.CompareTo(wikiArray[midIndex, 1]) > 0) // if input comes after the midIndex item alphabetically, set the lower bound to mid+1
+                    else if (input.CompareTo(wikiArray[midIndex, 0]) > 0) // if input comes after the midIndex item alphabetically, set the lower bound to mid+1
                     {
-                        //debugWriter.WriteLine("Input Comes after mid index\n");
+                        debugWriter.WriteLine("Input Comes after mid index: {0}\n", wikiArray[midIndex, 0]);
 
                         startIndex = midIndex + 1;
                     }
                     else // else the input comes before the mid index so set upper bound to mid-1.
                     {
-                        //debugWriter.WriteLine("Input comes before mid index\n");
+                        debugWriter.WriteLine("Input comes before mid index: {0}\n", wikiArray[midIndex, 0]);
 
                         endIndex = midIndex - 1;
                     }
@@ -308,7 +310,6 @@ namespace DataStructureWikiForm
                 }
 
             }
-            //debugWriter.Close();
         }
         #endregion
 
