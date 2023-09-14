@@ -269,7 +269,7 @@ namespace DataStructureWikiForm
         private void BinarySearch(string input)
         {
             int startIndex = 0;
-            int endIndex = maxRows;
+            int endIndex = maxRows - 1;
             int midIndex = 0;
             bool flag = false;
 
@@ -421,7 +421,6 @@ namespace DataStructureWikiForm
         }
         private void SaveFile(string fileName)
         {
-
             try // try-catch for any file io exceptions.
             {
                 using var fileStream = new FileStream(fileName, FileMode.Create); // File stream allows file to be open and created in this case
